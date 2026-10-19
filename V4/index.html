@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173e37">
+  <title>走進嘉藥 V10｜嘉寶的寬螢幕校園</title>
+  <meta name="description" content="依嘉南藥理大學官方配置圖製作的互動校園體塊示意。旋轉、縮放、搜尋與點選建築，認識校園。">
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+  <a class="skip" href="#buildingSearch">跳至建築搜尋</a>
+  <header class="masthead">
+    <a class="brand" href="./" aria-label="走進嘉藥首頁"><span class="brand-mark">嘉</span><span><strong>走進嘉藥<span class="brand-dot">.</span></strong><small>CNU CAMPUS EXPLORER</small></span></a>
+    <div class="header-note"><span class="live-dot"></span>嘉南藥理大學 · 互動校園示意</div>
+    <button id="sourcesOpen" class="text-button">資料與製作說明 ↗</button>
+  </header>
+  <main class="workspace">
+    <aside class="sidebar" aria-label="校園建築導覽">
+      <div class="sidebar-intro"><p class="eyebrow">A LITTLE CLOSER TO CAMPUS</p><h1>從這裡，<br>認識嘉藥。</h1><p>轉個角度，看見校園。<br>點選一棟建築，開始探索。</p></div>
+      <label class="search-label" for="buildingSearch">尋找校園建築</label>
+      <div class="search-wrap"><span aria-hidden="true">⌕</span><input id="buildingSearch" type="search" placeholder="輸入名稱或代碼，如 L、圖書館" autocomplete="off"></div>
+      <div class="filters" role="group" aria-label="建築類別">
+        <button data-filter="all" aria-pressed="true">全部</button><button data-filter="學習" aria-pressed="false">學習</button><button data-filter="生活" aria-pressed="false">生活</button><button data-filter="運動" aria-pressed="false">運動</button><button data-filter="行政" aria-pressed="false">行政</button>
+      </div>
+      <div class="list-heading"><span>校園建築</span><span id="resultCount"></span></div>
+      <div id="buildingList" class="building-list"></div><div class="landmark-nav" aria-label="校園地景"><span>走近校園風景</span><div><button id="gateView">校門近看 ↗</button><button id="treesView">林蔭步道 ↗</button><button id="photosOpen">📷 校園實景照片</button><button id="statueOpen">雕像細部 ↗</button></div></div>
+      <footer class="sidebar-footer"><span class="tiny-dot"></span>V10 · 實景風格與藥丸漫遊<br><span>名稱依官方圖；外觀與樓高為示意。</span></footer>
+    </aside>
+    <section class="map-panel" aria-label="互動 3D 校園">
+      <div id="scene" role="img" aria-label="嘉藥校園三維體塊示意。可拖曳旋轉、滾輪縮放；也可用頂端搜尋選擇建築。" tabindex="0"></div>
+      <div id="labels" aria-label="地圖建築標籤"></div>
+      <button id="visitConfucius" class="exhibit-visit">🏛 帶我到孔子像 <span>和嘉寶 Jiabao一起看 ↗</span></button><article id="exhibitNote" class="exhibit-note" hidden><button id="exhibitClose" aria-label="收起孔子像說明">×</button><strong>孔子像 · 圖書館前</strong><p>眼前的深色立像就是孔子像，嘉寶 Jiabao已站在前方。拖曳可換角度，滾輪可放大。</p><small>依使用者確認配置於王趁紀念圖書館前；細部位置與距離為示意。</small></article><div class="map-top"><span class="view-tag"><span></span><span id="viewName">立體鳥瞰</span></span><button id="walkToggle" aria-pressed="false">🚶 進入校園</button><span class="schematic">配置圖重建 · 非實測比例</span></div>
+      <div class="map-tools" aria-label="視角控制">
+        <button id="home" title="回到全校鳥瞰" aria-label="回到全校鳥瞰">⌂</button>
+        <button id="top" title="切換俯視" aria-label="切換俯視" aria-pressed="false">▱</button>
+        <span></span><button id="zoomIn" title="放大" aria-label="放大">＋</button><button id="zoomOut" title="縮小" aria-label="縮小">−</button>
+        <span></span><button id="rotate" title="自動旋轉" aria-label="自動旋轉" aria-pressed="false">↻</button>
+      </div>
+      <article id="detail" class="detail-card" hidden aria-label="建築資訊">
+        <div class="detail-top"><span id="detailCategory"></span><button id="detailClose" aria-label="關閉建築資訊">×</button></div>
+        <span id="detailCode" class="detail-code"></span><h2 id="detailName"></h2>
+        <p id="detailText"></p><div class="detail-source">名稱來源：校方校園配置圖<br>體塊、樓高、材質與細部為示意。</div>
+        <button id="focus" class="primary">靠近觀察 <span>↗</span></button>
+      </article>
+      <div id="walkHint" class="walk-hint" hidden><strong>跟著嘉寶 Jiabao，出發！</strong><span id="nearby">沿著校園空地探索</span><small>W A S D／方向鍵移動 · 拖曳轉鏡頭 · Esc 回鳥瞰<br>示意空間；不是實地通行路線。</small></div><div id="walkPad" class="walk-pad" hidden aria-label="角色方向控制"><button data-move="up" aria-label="向前走">▲</button><div><button data-move="left" aria-label="向左走">◀</button><button data-move="down" aria-label="向後走">▼</button><button data-move="right" aria-label="向右走">▶</button></div></div><canvas id="walkMap" width="180" height="130" hidden aria-label="人物在示意校園中的位置"></canvas><div id="loading" class="loading">正在建立校園模型…</div>
+      <div class="map-bottom">
+        <div class="legend" aria-label="建築顏色圖例"><span><i style="--c:#b8c7ba"></i>學習</span><span><i style="--c:#d3b49b"></i>生活</span><span><i style="--c:#97bcb7"></i>運動</span><span><i style="--c:#c7c0a4"></i>行政</span></div>
+        <div class="tour-box"><div><span class="eyebrow">TAKE A LOOK AROUND</span><strong id="tourText">讓鏡頭帶你走一圈</strong></div><button id="tour" class="primary" aria-pressed="false">開始導覽 <span>▶</span></button></div>
+        <p class="gesture-hint">拖曳旋轉 · 滾輪縮放 · 右鍵平移<br><span>手機：單指旋轉，雙指縮放與平移</span></p>
+      </div>
+      <section class="audio-panel" aria-label="音樂與語音控制">
+        <button id="photosQuick" class="photo-quick">📷 看校園實景照片</button><div class="audio-title">校園的聲音 <small>SOUND ON YOUR TERMS</small></div>
+        <div class="audio-switches"><button id="musicToggle" aria-pressed="false">♫ 背景音樂：關</button><button id="voiceToggle" aria-pressed="false">◉ 語音導覽：關</button></div>
+        <div class="audio-volume"><label for="audioVolume">音量</label><input id="audioVolume" type="range" min="0" max="100" value="40"><output id="volumeValue" for="audioVolume">40%</output><button id="voiceReplay" disabled aria-label="重聽目前介紹">重聽 ↻</button></div>
+        <p id="audioNote" role="status">目前為裝置中文語音，雅婷音檔待匯入。</p>
+      </section>
+      <div id="status" class="sr-only" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <dialog id="sourcesDialog"><div class="dialog-head"><p class="eyebrow">ABOUT THIS CAMPUS</p><button id="sourcesClose" aria-label="關閉說明">×</button></div><h2>從官方配置圖，<br>走向立體校園。</h2><p>這是嘉南藥理大學的教學用第一版示意模型，並非校方正式導航系統。</p><h3>已核對的資訊</h3><p>建築名稱、代碼與大致配置依校方目前公開連結的配置圖整理。來源檔案名稱含「1090907」，網站檔案路徑日期為 2023 年；是否反映目前全部校舍變動，仍需校方或使用者核對。</p><ul><li><a href="https://www.cnu.edu.tw/" target="_blank" rel="noopener">嘉南藥理大學官方網站 ↗</a></li><li><a href="https://www.cnu.edu.tw/content-text.asp?fid=7&id=911" target="_blank" rel="noopener">校方校園地圖頁 ↗</a></li><li><a href="https://www.cnu.edu.tw/d_files/18/docs/20230303093541.pdf" target="_blank" rel="noopener">校園配置圖 PDF ↗</a></li></ul><h3>V10 實景參考</h3><p>校門依官方「校門口」照片整理校名牆、門面、圓弧玻璃與柱體意象；林蔭格架依官方「嘉南大道」照片整理。植栽位置、比例與樹種未逐一核對。孔子像依校方相簿製作外觀研究，使用者確認孔子像在圖書館前；V10 據此配置，細部座標、方向與距離未實測。</p><ul><li><a href="https://www.cnu.edu.tw/content-photo.asp?fid=7&id=619&sid=608&type=2" target="_blank" rel="noopener">官方校門與嘉南大道相簿 ↗</a></li><li><a href="https://libcvod.cnu.edu.tw/media/1495" target="_blank" rel="noopener">官方孔子像相簿 ↗</a></li></ul><h3>示意與限制</h3><p>建築座標由斜視配置圖人工估讀，無地理校正；主要校舍體塊、樓高、門窗與顏色仍為示意；V10 校門及新增景觀參照官方照片簡化。植栽與格架未逐一實地定位。導覽是鏡頭巡覽，不代表可通行路線或無障礙路線。</p><h3>操作方式</h3><p>滑鼠拖曳旋轉、滾輪縮放、右鍵平移。也可用建築清單和視角按鈕操作；按 Escape 關閉資訊或回到鳥瞰。點「進入校園」後，用 W/A/S/D、方向鍵或觸控方向鈕移動角色。手機使用單指旋轉、雙指縮放與平移。</p><h3>製作與資料</h3><p>使用 Three.js 0.180.0 建立程序化模型，無需安裝 Blender 或 MCP。本站未加入追蹤服務與帳號功能；搜尋內容在瀏覽器中處理。Three.js 採 MIT 授權。背景音樂為瀏覽器合成旋律；中文朗讀使用裝置的語音服務，音色及是否連網依系統設定而定。音樂與語音預設皆關閉。</p><p class="detail-source">資料查閱：2026-10-19 · 作品版本 V10（角色步行與語音版）</p></dialog>
+  <dialog id="statueDialog" class="statue-dialog"><div class="dialog-head"><p class="eyebrow">CAMPUS SCULPTURE STUDY</p><button id="statueClose" aria-label="關閉孔子像展示">×</button></div><h2>孔子像 · 外觀研究</h2><p>依校方照片建立的簡化立像，可拖曳旋轉、縮放。<strong>孔子像已依使用者確認配置於圖書館前；細部位置與距離仍為示意，此視窗供細部觀察。</strong></p><div id="statueScene" aria-label="孔子像三維外觀研究"></div><p>參考照片可見長袍、胸前交疊雙手、深色立像、石座與階梯。臉部與衣紋是程序化簡化，並非掃描重建。</p><a href="https://libcvod.cnu.edu.tw/media/1495" target="_blank" rel="noopener">查看校方孔子像相簿 ↗</a></dialog>
+<dialog id="photosDialog" class="photos-dialog"><div class="dialog-head"><p class="eyebrow">REAL CAMPUS / 3D EXPLORER</p><button id="photosClose" aria-label="關閉實景照片">×</button></div><h2>照片裡的嘉藥</h2><p>觀看校方實景照片，再回到 3D 模型探索。照片拍攝時間不同，景觀可能已有變動；模型仍為簡化示意。</p><div id="photoGrid" class="photo-grid"></div><div class="statue-photo-source"><strong>孔子像實景參考</strong><p>照片請至校方相簿查看；本版未擷取其照片檔案。模型已依你的確認放在圖書館前。</p><a href="https://libcvod.cnu.edu.tw/media/1495" target="_blank" rel="noopener">開啟校方孔子像相簿 ↗</a><button id="photoStatue">回 3D 看孔子像 →</button></div><p class="detail-source">照片由嘉南藥理大學官網外部載入，著作權屬原權利人。未包入下載檔；離線或來源網站無法連線時，請使用來源連結。</p></dialog><script src="./layout.js"></script><script type="module" src="./photos.js"></script><script type="module" src="./app.js"></script>
+</body>
+</html>
